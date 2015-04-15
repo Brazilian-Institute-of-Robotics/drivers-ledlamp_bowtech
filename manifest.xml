@@ -1,0 +1,19 @@
+<package>
+  <description brief="Driver for the Bowtech LED lamps">
+  
+  </description>
+  <author>Diego Cesar and Rafael Saback/diego.cesar@fieb.org.br; rafael.saback@fieb.org.br</author>
+  <license></license>
+  <url>http://</url>
+  <logo>http://</logo>
+  <depend package="base/cmake" />
+  <!--
+   To add any dependencies use the depend tag
+  <depend package="dummy-dependency-0" />
+	...
+  <depend package="dummy-dependency-n-1" />
+  <depend package="dummy-dependency-n" />
+  -->
+  <depend package="base/types" />
+  <depend package="drivers/iodrivers_base" />
+</package>
