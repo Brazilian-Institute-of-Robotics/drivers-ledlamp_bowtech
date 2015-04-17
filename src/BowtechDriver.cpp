@@ -108,7 +108,6 @@ namespace ledlamp_bowtech {
 
 	int BowtechDriver::extractPacket(const uint8_t* buffer, size_t buffer_size)
 	{
-		//TODO: what should I return here?
 		return 0;
 	}
 
