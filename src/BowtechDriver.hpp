@@ -27,7 +27,7 @@ namespace ledlamp_bowtech
 			void setPowerUpLightLevel(uint8_t value, int address=-1);
 
 		private:
-			virtual int extractPacket(const uint8_t* buffer, size_t buffer_size);
+			virtual int extractPacket(const uint8_t* buffer, size_t buffer_size) const;
 			uint8_t checksum(uint8_t byte1, uint8_t byte2, uint8_t byte3);
 	};
 

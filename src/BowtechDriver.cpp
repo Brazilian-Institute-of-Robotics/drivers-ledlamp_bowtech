@@ -106,7 +106,7 @@ namespace ledlamp_bowtech {
 		this->writePacket(data, BOWTECH_PACKET_SIZE);
 	}
 
-	int BowtechDriver::extractPacket(const uint8_t* buffer, size_t buffer_size)
+	int BowtechDriver::extractPacket(const uint8_t* buffer, size_t buffer_size) const
 	{
 		return 0;
 	}
