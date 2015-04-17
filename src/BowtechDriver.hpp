@@ -11,21 +11,25 @@
 #include "iodrivers_base/Driver.hpp"
 
 
-namespace ledlamp_bowtech {
-
-class BowtechDriver : public iodrivers_base::Driver
+namespace ledlamp_bowtech
 {
-	public:
-		BowtechDriver();
-		virtual ~BowtechDriver();
-		void setAddress(uint8_t &current_address, uint8_t &new_address);
-		void getAddress(void);
-		void setLightLevel(uint8_t &value, uint8_t &address=-1);
-		void setPowerUpLightLevel(uint8_t& value, uint8_t& address);
 
-	private:
-		virtual int extractPacket(const uint8_t* buffer, size_t buffer_size);
-};
+	class BowtechDriver : public iodrivers_base::Driver
+	{
+		static const int BOWTECH_PACKET_SIZE = 6;
+
+		public:
+			BowtechDriver();
+			virtual ~BowtechDriver();
+			void setAddress(uint8_t current_address, uint8_t new_address);
+			void getAddress();
+			void setLightLevel(uint8_t value, int address=-1);
+			void setPowerUpLightLevel(uint8_t value, int address=-1);
+
+		private:
+			virtual int extractPacket(const uint8_t* buffer, size_t buffer_size);
+			uint8_t checksum(uint8_t byte1, uint8_t byte2, uint8_t byte3);
+	};
 
 } /* namespace ledlamp_bowtech */
 
