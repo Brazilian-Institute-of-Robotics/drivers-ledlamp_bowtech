@@ -9,6 +9,7 @@
 #define SRC_BOWTECHDRIVER_HPP_
 
 #include "iodrivers_base/Driver.hpp"
+#include <iostream>
 
 
 namespace ledlamp_bowtech
@@ -16,7 +17,8 @@ namespace ledlamp_bowtech
 
 	class BowtechDriver : public iodrivers_base::Driver
 	{
-		static const int BOWTECH_PACKET_SIZE = 6;
+		static const int BOWTECH_MAX_PACKET_SIZE = 200;
+		static const int BOWTECH_COMMAND_SIZE = 6;
 
 		public:
 			BowtechDriver();
