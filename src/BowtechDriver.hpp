@@ -10,6 +10,9 @@
 
 #include "iodrivers_base/Driver.hpp"
 #include <iostream>
+#include <sstream>
+#include <iomanip>
+
 
 
 namespace ledlamp_bowtech
@@ -31,6 +34,7 @@ namespace ledlamp_bowtech
 		private:
 			virtual int extractPacket(const uint8_t* buffer, size_t buffer_size) const;
 			uint8_t checksum(uint8_t byte1, uint8_t byte2, uint8_t byte3);
+			void readMsg();
 	};
 
 } /* namespace ledlamp_bowtech */

@@ -11,7 +11,7 @@ namespace ledlamp_bowtech {
 
 	BowtechDriver::BowtechDriver() : iodrivers_base::Driver(BOWTECH_MAX_PACKET_SIZE)
 	{
-		// TODO Auto-generated constructor stub
+
 	}
 
 	BowtechDriver::~BowtechDriver()
@@ -35,6 +35,7 @@ namespace ledlamp_bowtech {
 		data[5] = 0x0A;
 
 		this->writePacket(data, BOWTECH_COMMAND_SIZE);
+		readMsg();
 	}
 
 	void BowtechDriver::getAddress()
@@ -51,24 +52,21 @@ namespace ledlamp_bowtech {
 		if (iodrivers_base::Driver::writePacket(data, BOWTECH_COMMAND_SIZE))
 		{
 		uint8_t* reply = new uint8_t[BOWTECH_MAX_PACKET_SIZE];
-		std::cout << BOWTECH_MAX_PACKET_SIZE << std::endl;
 
-		int packet_size = iodrivers_base::Driver::readPacket(reply, BOWTECH_MAX_PACKET_SIZE, 100);
-		std::cout << "Packet_size" << packet_size << std::endl;
-		std::cout << std::hex << reply << std::endl;
+		iodrivers_base::Driver::readPacket(reply, BOWTECH_MAX_PACKET_SIZE, 200);
 
+		std::stringstream ss;
+		ss.str("");
+		ss << reply[67];
+		ss << reply[68];
+		ss << reply[69];
 
-		char a = reply[68];
-		uint8_t i = (uint8_t)a;
-		int add = i*100;
-		a = reply[69];
-		i = (uint8_t)a;
-		add += i*10;
-		a = reply[70];
-		i = (uint8_t)a;
-		add += i*1;
+		int address;
+		ss >> address;
 
-		std::cout << "lamp_address " << add << std::endl;
+		std::cout << "lamp_address " << address << std::endl;
+
+		delete[] reply;
 		}
 
 	}
@@ -96,6 +94,7 @@ namespace ledlamp_bowtech {
 		data[5] = 0x0A;
 
 		this->writePacket(data, BOWTECH_COMMAND_SIZE);
+		readMsg();
 
 	}
 
@@ -122,19 +121,42 @@ namespace ledlamp_bowtech {
 		data[5] = 0x0A;
 
 		this->writePacket(data, BOWTECH_COMMAND_SIZE);
+		readMsg();
 	}
 
 	int BowtechDriver::extractPacket(const uint8_t* buffer, size_t buffer_size) const
 	{
-		if (buffer[0] == 0x0d & buffer[1] == 0x0a)
-			return 116;
+		if (buffer[0] == 0x0d)
+		{
+			if (buffer_size <3)
+				return 0;
+			else if (buffer_size >= 3 & buffer[2] == 0x42)
+				return ((buffer_size < 116) ?  0 : 116);
+			else
+				return -buffer_size;
+		}
 		else
-			return -buffer_size;
+			return ((buffer_size < BOWTECH_COMMAND_SIZE) ?  0 : BOWTECH_COMMAND_SIZE);
 	}
 
 	uint8_t BowtechDriver::checksum(uint8_t byte1, uint8_t byte2, uint8_t byte3)
 	{
 		return (byte1^byte2)^byte3;
+	}
+
+	void BowtechDriver::readMsg()
+	{
+		uint8_t* reply = new uint8_t[BOWTECH_MAX_PACKET_SIZE];
+		int packet_size = iodrivers_base::Driver::readPacket(reply, BOWTECH_MAX_PACKET_SIZE,50);
+
+		std::cout << "Ox";
+		for (int i=0; i< packet_size; ++i)
+		{
+			std::cout << std::setw(2) << std::setfill('0') << std::hex << (int)reply[i] << " ";
+		}
+		std::cout << std::endl;
+
+		delete[] reply;
 	}
 
 } /* namespace ledlamp_bowtech */

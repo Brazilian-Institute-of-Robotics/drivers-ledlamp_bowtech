@@ -15,21 +15,17 @@ int main()
 
 	BowtechDriver lamp;
 
-	lamp.openSerial("/dev/ttyUSB0", 9600);
+	lamp.openSerial("/dev/ttyUSB1", 9600);
 
+	usleep(10000);
 	lamp.setPowerUpLightLevel(50);
-	usleep(1000000);
-	for (int i=0; i < 4; ++i)
-	{
-	lamp.setLightLevel(5);
-	usleep(1000000);
-	lamp.setLightLevel(50);
-	usleep(1000000);
-	lamp.setLightLevel(100);
-	usleep(1000000);
-	}
-//	lamp.getAddress();
-
+	usleep(10000);
+	lamp.setLightLevel(20);
+	usleep(10000);
+	lamp.setAddress(2, 10);
+	usleep(10000);
+	lamp.getAddress();
+	usleep(10000);
 
 
 	lamp.close();
