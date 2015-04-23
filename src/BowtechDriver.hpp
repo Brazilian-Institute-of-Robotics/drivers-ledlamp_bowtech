@@ -32,12 +32,12 @@ namespace ledlamp_bowtech
 			 * @param current_address - Current address of the lamp
 			 * @param new_address - New address for the lamp
 			 */
-			void setAddress(uint8_t current_address, uint8_t new_address);
+			void setAddress(uint8_t current_address, uint8_t new_address, bool msg_header = false);
 
 			/**
 			 * Gets the adress of all conected lamps
 			 */
-			void getAddress();
+			void getAddress(bool msg_header = false);
 
 			/**
 			 * Sets the light level of a specific lamp or sets the light
@@ -50,7 +50,7 @@ namespace ledlamp_bowtech
 			 * 					changing the light level of a specific lamp,
 			 * 					its address must be set in this variable [1, 255].
 			 */
-			void setLightLevel(uint8_t value, int address=-1);
+			void setLightLevel(uint8_t value, int address=-1, bool msg_header = false);
 
 			/**
 			 * Sets the default light level for when the lamp is powered up
@@ -62,7 +62,7 @@ namespace ledlamp_bowtech
 			 * 					changing the power up light level of a specific lamp,
 			 * 					its address must be set in this variable [1, 255].
 			 */
-			void setPowerUpLightLevel(uint8_t value, int address=-1);
+			void setPowerUpLightLevel(uint8_t value, int address=-1, bool msg_header = false);
 
 		private:
 			virtual int extractPacket(const uint8_t* buffer, size_t buffer_size) const;

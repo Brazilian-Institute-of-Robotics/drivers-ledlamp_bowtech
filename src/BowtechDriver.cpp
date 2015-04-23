@@ -20,40 +20,64 @@ namespace ledlamp_bowtech {
 	}
 
 
-	void BowtechDriver::setAddress(uint8_t current_address, uint8_t new_address)
+	void BowtechDriver::setAddress(uint8_t current_address, uint8_t new_address, bool msg_header)
 	{
 		if (new_address > 255 || new_address <=0 || current_address > 255 || current_address <=0)
 			throw std::runtime_error("The address must be a value between 1 and 255  - [1,255]");
 
 		uint8_t data[BOWTECH_COMMAND_SIZE];
 
-		data[0] = '<';
-		data[1] = 'L';
-		data[2] = '>';
-		data[3] = current_address;
-		data[4] = 0x27;
-		data[5] = new_address;
-		data[6] = checksum(data[0], data[1], data[2]);
-		data[7] = 0x0D;
-		data[8] = 0x0A;
+		if(msg_header)
+		{
+			data[0] = '<';
+			data[1] = 'L';
+			data[2] = '>';
+			data[3] = current_address;
+			data[4] = 0x27;
+			data[5] = new_address;
+			data[6] = checksum(data[0], data[1], data[2]);
+			data[7] = 0x0D;
+			data[8] = 0x0A;
+		}
+		else
+		{
+			data[0] = current_address;
+			data[1] = 0x27;
+			data[2] = new_address;
+			data[3] = checksum(data[0], data[1], data[2]);
+			data[4] = 0x0D;
+			data[5] = 0x0A;
+		}
 
 		this->writePacket(data, BOWTECH_COMMAND_SIZE);
 		readMsg();
 	}
 
-	void BowtechDriver::getAddress()
+	void BowtechDriver::getAddress(bool msg_header)
 	{
-		uint8_t data[6];
+		uint8_t data[BOWTECH_COMMAND_SIZE];
 
-		data[0] = '<';
-		data[1] = 'L';
-		data[2] = '>';
-		data[3] = 0x52;
-		data[4] = 0x29;
-		data[5] = 0xFF;
-		data[6] = checksum(data[0], data[1], data[2]);
-		data[7] = 0x0D;
-		data[8] = 0x0A;
+		if(msg_header)
+		{
+			data[0] = '<';
+			data[1] = 'L';
+			data[2] = '>';
+			data[3] = 0x52;
+			data[4] = 0x29;
+			data[5] = 0xFF;
+			data[6] = checksum(data[0], data[1], data[2]);
+			data[7] = 0x0D;
+			data[8] = 0x0A;
+		}
+		else
+		{
+			data[0] = 0x52;
+			data[1] = 0x29;
+			data[2] = 0xFF;
+			data[3] = checksum(data[0], data[1], data[2]);
+			data[4] = 0x0D;
+			data[5] = 0x0A;
+		}
 
 		if (iodrivers_base::Driver::writePacket(data, BOWTECH_COMMAND_SIZE))
 		{
@@ -77,7 +101,7 @@ namespace ledlamp_bowtech {
 
 	}
 
-	void BowtechDriver::setLightLevel(uint8_t value, int address)
+	void BowtechDriver::setLightLevel(uint8_t value, int address, bool msg_header)
 	{
 		//if is a valid value, calculates the percentual value for the light level.
 		if (value > 100 || value <=0)
@@ -92,22 +116,34 @@ namespace ledlamp_bowtech {
 
 		uint8_t data[BOWTECH_COMMAND_SIZE];
 
-		data[0] = '<';
-		data[1] = 'L';
-		data[2] = '>';
-		data[3] = (uint8_t)address;
-		data[4] = 0x28;
-		data[5] = value;
-		data[6] = checksum(data[0], data[1], data[2]);
-		data[7] = 0x0D;
-		data[8] = 0x0A;
+		if(msg_header)
+		{
+			data[0] = '<';
+			data[1] = 'L';
+			data[2] = '>';
+			data[3] = (uint8_t)address;
+			data[4] = 0x28;
+			data[5] = value;
+			data[6] = checksum(data[0], data[1], data[2]);
+			data[7] = 0x0D;
+			data[8] = 0x0A;
+		}
+		else
+		{
+			data[0] = (uint8_t)address;
+			data[1] = 0x28;
+			data[2] = value;
+			data[3] = checksum(data[0], data[1], data[2]);
+			data[4] = 0x0D;
+			data[5] = 0x0A;
+		}
 
 		this->writePacket(data, BOWTECH_COMMAND_SIZE);
 		readMsg();
 
 	}
 
-	void BowtechDriver::setPowerUpLightLevel(uint8_t value, int address)
+	void BowtechDriver::setPowerUpLightLevel(uint8_t value, int address, bool msg_header)
 	{
 		//if is a valid value, calculates the percentual value for the light level.
 		if (value > 100 || value <=0)
@@ -122,15 +158,27 @@ namespace ledlamp_bowtech {
 
 		uint8_t data[BOWTECH_COMMAND_SIZE];
 
-		data[0] = '<';
-		data[1] = 'L';
-		data[2] = '>';
-		data[3] = (uint8_t)address;
-		data[4] = 0x2A;
-		data[5] = value;
-		data[6] = checksum(data[0], data[1], data[2]);
-		data[7] = 0x0D;
-		data[8] = 0x0A;
+		if(msg_header)
+		{
+			data[0] = '<';
+			data[1] = 'L';
+			data[2] = '>';
+			data[3] = (uint8_t)address;
+			data[4] = 0x2A;
+			data[5] = value;
+			data[6] = checksum(data[0], data[1], data[2]);
+			data[7] = 0x0D;
+			data[8] = 0x0A;
+		}
+		else
+		{
+			data[0] = (uint8_t)address;
+			data[1] = 0x2A;
+			data[2] = value;
+			data[3] = checksum(data[0], data[1], data[2]);
+			data[4] = 0x0D;
+			data[5] = 0x0A;
+		}
 
 		this->writePacket(data, BOWTECH_COMMAND_SIZE);
 		readMsg();
