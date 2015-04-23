@@ -26,9 +26,42 @@ namespace ledlamp_bowtech
 		public:
 			BowtechDriver();
 			virtual ~BowtechDriver();
+
+			/**
+			 * Sets the adress of a lamp to a new value
+			 * @param current_address - Current address of the lamp
+			 * @param new_address - New address for the lamp
+			 */
 			void setAddress(uint8_t current_address, uint8_t new_address);
+
+			/**
+			 * Gets the adress of all conected lamps
+			 */
 			void getAddress();
+
+			/**
+			 * Sets the light level of a specific lamp or sets the light
+			 * level for all lamps (address < 0)
+			 * @param value - Desired light level. Should belong to the
+			 * 				  interval [1, 100]
+			 * @param address - Address of the lamp whose light level will
+			 * 					be changed. If address < 0, then the light
+			 * 					level will be applied to all lamps. For
+			 * 					changing the light level of a specific lamp,
+			 * 					its address must be set in this variable [1, 255].
+			 */
 			void setLightLevel(uint8_t value, int address=-1);
+
+			/**
+			 * Sets the default light level for when the lamp is powered up
+			 * @param value - Desired power up light level. Should belong to the
+			 * 				  interval [1, 100]
+			 * @param address - Address of the lamp whose power up light level will
+			 * 					be changed. If address < 0, then the power up light
+			 * 					level will be applied to all lamps. For
+			 * 					changing the power up light level of a specific lamp,
+			 * 					its address must be set in this variable [1, 255].
+			 */
 			void setPowerUpLightLevel(uint8_t value, int address=-1);
 
 		private:
