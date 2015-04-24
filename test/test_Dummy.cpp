@@ -21,8 +21,6 @@ int main()
 	lamp.setPowerUpLightLevel(50);
 	usleep(10000);
 	lamp.setLightLevel(20);
-//	usleep(10000);
-//	lamp.setAddress(2, 10);
 	usleep(10000);
 	lamp.getAddress();
 	usleep(10000);
