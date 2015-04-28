@@ -12,21 +12,31 @@ using namespace ledlamp_bowtech;
 
 int main()
 {
-
+	std::vector<int> address_list;
+	address_list.clear();
 	BowtechDriver lamp;
 
-	lamp.openSerial("/dev/ttyUSB1", 9600);
 
+	lamp.openSerial("/dev/ttyUSB0", 9600);
 	usleep(10000);
-	lamp.setPowerUpLightLevel(50);
+
+//	lamp.setCmdLabel("<L>");
+
+	lamp.setPowerUpLightLevel(60);
 	usleep(10000);
-	lamp.setLightLevel(20);
-	usleep(10000);
-	lamp.getAddress();
+
+	lamp.setLightLevel(40);
 	usleep(10000);
 
 
 	lamp.close();
+
+
+	std::cout << "LISTA DE ENDEREÇOS" << std::endl;
+	for (int i=0; i < address_list.size(); ++i)
+	{
+		std::cout << address_list[i] << std::endl;
+	}
 
 
 	return 0;
