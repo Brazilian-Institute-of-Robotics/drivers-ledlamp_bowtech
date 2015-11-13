@@ -35,60 +35,54 @@ namespace ledlamp_bowtech {
 		delete[] data;
 	}
 
-	void BowtechDriver::getAddress(std::vector<int>* address_list)
+	std::vector<int> BowtechDriver::getAddress()
 	{
+        std::vector<int> address_list;
+
 		uint8_t* data = new uint8_t[BOWTECH_COMMAND_SIZE + cmd_label.size()];
 
 		/*command for inquiry the lamp address*/
 		uint8_t command = 0x29;
 
-
-		/*ask all address and store all allocated address
-		 * in a vector*/
+		//ask all address and store all allocated address in a vector
 		for (int i=1; i < 255; ++i)
 		{
-			if (i != BROADCAST_ADDRESS)
-			{
-				generateCommand(command, 0xFF, i, data);
-				iodrivers_base::Driver::writePacket(data, BOWTECH_COMMAND_SIZE + cmd_label.size());
+            if (i != BROADCAST_ADDRESS)
+            {
+                generateCommand(command, 0xFF, i, data);
+                iodrivers_base::Driver::writePacket(data, BOWTECH_COMMAND_SIZE + cmd_label.size());
 
+                uint8_t* reply = new uint8_t[BOWTECH_MAX_PACKET_SIZE];
+                iodrivers_base::Driver::readPacket(reply, BOWTECH_MAX_PACKET_SIZE, 200, 30);
 
-				try
-				{
-				uint8_t* reply = new uint8_t[BOWTECH_MAX_PACKET_SIZE];
-				iodrivers_base::Driver::readPacket(reply, BOWTECH_MAX_PACKET_SIZE, 200, 30);
+                //strem the position of the address in the message
+                std::stringstream ss;
+                ss.str("");
+                ss << reply[67] << reply[68] << reply[69];
 
-				std::stringstream ss;
-				ss.str("");
-				ss << reply[67] << reply[68] << reply[69];
+                int address;
+                ss >> address;
 
-				int address;
-				ss >> address;
+                address_list.push_back(address);
 
-				address_list->push_back(address);
+                delete[] reply;
+                reply = NULL;
 
-				delete[] reply;
-				reply = NULL;
-				}
-				catch (iodrivers_base::TimeoutError &e)
-				{
-				}
+                return address_list;
 
-
-			}
+            }
 		}
 
 		delete[] data;
 	}
 
-	void BowtechDriver::setLightLevel(uint8_t value, uint8_t address)
+	void BowtechDriver::setLightLevel(float value, uint8_t address)
 	{
 		//if is a valid value, calculates the percentual value for the light level.
-		if (value > 100 || value ==0)
-			throw std::runtime_error("The light level must be a value between 1 and 100 - [1,100]");
+		if (value > 1 || value < 0)
+			throw std::runtime_error("The light level must be a value between 0 and 1");
 		else
-			value = (255*value)/100;
-
+			value = (254*value)/100+1;
 
 		uint8_t* data = new uint8_t[BOWTECH_COMMAND_SIZE + cmd_label.size()];
 		uint8_t command = 0x28;
@@ -104,16 +98,15 @@ namespace ledlamp_bowtech {
 	void BowtechDriver::setPowerUpLightLevel(uint8_t value, uint8_t address)
 	{
 		//if is a valid value, calculates the percentual value for the light level.
-		if (value > 100 || value ==0)
-			throw std::runtime_error("The light level must be a value between 1 and 100 - [1,100]");
+		if (value > 1 || value < 0)
+			throw std::runtime_error("The light level must be a value between 0 and 1");
 		else
-			value = (255*value)/100;
+			value = (254*value)/100+1;
 
 		uint8_t* data = new uint8_t[BOWTECH_COMMAND_SIZE + cmd_label.size()];
 		uint8_t command = 0x2A;
 
 		generateCommand(command, value, address, data);
-
 
 		this->writePacket(data, BOWTECH_COMMAND_SIZE + cmd_label.size());
 		readMsg();
@@ -148,7 +141,7 @@ namespace ledlamp_bowtech {
 	void BowtechDriver::readMsg()
 	{
 		uint8_t* reply = new uint8_t[BOWTECH_MAX_PACKET_SIZE];
-		int packet_size = iodrivers_base::Driver::readPacket(reply, BOWTECH_MAX_PACKET_SIZE,50);
+		iodrivers_base::Driver::readPacket(reply, BOWTECH_MAX_PACKET_SIZE,50);
 		delete[] reply;
 	}
 

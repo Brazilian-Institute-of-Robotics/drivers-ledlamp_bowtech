@@ -1,10 +1,3 @@
-/*
- * BowtechDriver.hpp
- *
- *  Created on: Apr 16, 2015
- *      Author: diego
- */
-
 #ifndef SRC_BOWTECHDRIVER_HPP_
 #define SRC_BOWTECHDRIVER_HPP_
 
@@ -37,15 +30,15 @@ namespace ledlamp_bowtech
 
 			/**
 			 * Gets the adress of all conected lamps
-			 * @param address_list - return a list of all available lamp address
+             * return a list of all available lamp address
 			 */
-			void getAddress(std::vector<int>* address_list);
+			std::vector<int> getAddress();
 
 			/**
 			 * Sets the light level of a specific lamp or sets the light
 			 * level for all lamps (BROADCAST_ADDRESS)
 			 * @param value - Desired light level. Should belong to the
-			 * 				  interval [1, 100]
+			 * 				  interval [0, 1]
 			 * @param address - Address of the lamp whose light level will
 			 * 					be changed. If address is equal to
 			 * 					BROADCAST_ADDRESS, then the light
@@ -53,7 +46,7 @@ namespace ledlamp_bowtech
 			 * 					changing the light level of a specific lamp,
 			 * 					its address must be set in this variable [1, 255].
 			 */
-			void setLightLevel(uint8_t value, uint8_t address=BROADCAST_ADDRESS);
+			void setLightLevel(float value, uint8_t address=BROADCAST_ADDRESS);
 
 			/**
 			 * Sets the default light level for when the lamp is powered up
