@@ -30,7 +30,6 @@ namespace ledlamp_bowtech {
 		generateCommand(command, new_address, current_address, data);
 
 		this->writePacket(data, BOWTECH_COMMAND_SIZE + cmd_label.size());
-		readMsg();
 
 		delete[] data;
 	}
@@ -96,7 +95,6 @@ namespace ledlamp_bowtech {
 		generateCommand(command, value, address, data);
 
 		this->writePacket(data, BOWTECH_COMMAND_SIZE + cmd_label.size());
-		readMsg();
 
 		delete[] data;
 	}
@@ -116,7 +114,6 @@ namespace ledlamp_bowtech {
 
 
 		this->writePacket(data, BOWTECH_COMMAND_SIZE + cmd_label.size());
-		readMsg();
 
 		delete[] data;
 	}
@@ -143,13 +140,6 @@ namespace ledlamp_bowtech {
 	uint8_t BowtechDriver::checksum(uint8_t byte1, uint8_t byte2, uint8_t byte3)
 	{
 		return (byte1^byte2)^byte3;
-	}
-
-	void BowtechDriver::readMsg()
-	{
-		uint8_t* reply = new uint8_t[BOWTECH_MAX_PACKET_SIZE];
-		int packet_size = iodrivers_base::Driver::readPacket(reply, BOWTECH_MAX_PACKET_SIZE,50);
-		delete[] reply;
 	}
 
 	void BowtechDriver::generateCommand(uint8_t command, uint8_t value, uint8_t address, uint8_t *data)
