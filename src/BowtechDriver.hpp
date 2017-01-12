@@ -45,7 +45,7 @@ namespace ledlamp_bowtech
 			 * Sets the light level of a specific lamp or sets the light
 			 * level for all lamps (BROADCAST_ADDRESS)
 			 * @param value - Desired light level. Should belong to the
-			 * 				  interval [1, 100]
+			 * 				  interval [0.0, 1.0]
 			 * @param address - Address of the lamp whose light level will
 			 * 					be changed. If address is equal to
 			 * 					BROADCAST_ADDRESS, then the light
@@ -53,12 +53,12 @@ namespace ledlamp_bowtech
 			 * 					changing the light level of a specific lamp,
 			 * 					its address must be set in this variable [1, 255].
 			 */
-			void setLightLevel(uint8_t value, uint8_t address=BROADCAST_ADDRESS);
+			void setLightLevel(float value, uint8_t address=BROADCAST_ADDRESS);
 
 			/**
 			 * Sets the default light level for when the lamp is powered up
 			 * @param value - Desired power up light level. Should belong to the
-			 * 				  interval [1, 100]
+			 * 				  interval [0.0, 1.0]
 			 * @param address - Address of the lamp whose power up light level will
 			 * 					be changed. If address is equal to
 			 * 					BROADCAST_ADDRESS, then the power up light
@@ -66,7 +66,7 @@ namespace ledlamp_bowtech
 			 * 					changing the power up light level of a specific lamp,
 			 * 					its address must be set in this variable [1, 255].
 			 */
-			void setPowerUpLightLevel(uint8_t value, uint8_t address=BROADCAST_ADDRESS);
+			void setPowerUpLightLevel(float value, uint8_t address=BROADCAST_ADDRESS);
 			/**
 			 * Sets the command label for the commands.
 			 * @param label - string that will be added at the begining of the command

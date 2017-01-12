@@ -30,7 +30,6 @@ namespace ledlamp_bowtech {
 		generateCommand(command, new_address, current_address, data);
 
 		this->writePacket(data, BOWTECH_COMMAND_SIZE + cmd_label.size());
-		readMsg();
 
 		delete[] data;
 	}
@@ -81,42 +80,36 @@ namespace ledlamp_bowtech {
 		delete[] data;
 	}
 
-	void BowtechDriver::setLightLevel(uint8_t value, uint8_t address)
+	void BowtechDriver::setLightLevel(float value, uint8_t address)
 	{
 		//if is a valid value, calculates the percentual value for the light level.
-		if (value > 100 || value ==0)
-			throw std::runtime_error("The light level must be a value between 1 and 100 - [1,100]");
-		else
-			value = (255*value)/100;
+		if (value < 0.0 || value > 1.0)
+			throw std::runtime_error("The light level must be a value between [0.0, 1.0]");
 
-
+		uint8_t light_value = 255 * value;
 		uint8_t* data = new uint8_t[BOWTECH_COMMAND_SIZE + cmd_label.size()];
 		uint8_t command = 0x28;
 
-		generateCommand(command, value, address, data);
+		generateCommand(command, light_value, address, data);
 
 		this->writePacket(data, BOWTECH_COMMAND_SIZE + cmd_label.size());
-		readMsg();
 
 		delete[] data;
 	}
 
-	void BowtechDriver::setPowerUpLightLevel(uint8_t value, uint8_t address)
+	void BowtechDriver::setPowerUpLightLevel(float value, uint8_t address)
 	{
 		//if is a valid value, calculates the percentual value for the light level.
-		if (value > 100 || value ==0)
-			throw std::runtime_error("The light level must be a value between 1 and 100 - [1,100]");
-		else
-			value = (255*value)/100;
+		if (value < 0.0 || value > 1.0)
+			throw std::runtime_error("The light level must be a value between [0.0, 1.0]");
 
+		uint8_t light_value = 255 * value;
 		uint8_t* data = new uint8_t[BOWTECH_COMMAND_SIZE + cmd_label.size()];
 		uint8_t command = 0x2A;
 
-		generateCommand(command, value, address, data);
-
+		generateCommand(command, light_value, address, data);
 
 		this->writePacket(data, BOWTECH_COMMAND_SIZE + cmd_label.size());
-		readMsg();
 
 		delete[] data;
 	}
@@ -143,13 +136,6 @@ namespace ledlamp_bowtech {
 	uint8_t BowtechDriver::checksum(uint8_t byte1, uint8_t byte2, uint8_t byte3)
 	{
 		return (byte1^byte2)^byte3;
-	}
-
-	void BowtechDriver::readMsg()
-	{
-		uint8_t* reply = new uint8_t[BOWTECH_MAX_PACKET_SIZE];
-		int packet_size = iodrivers_base::Driver::readPacket(reply, BOWTECH_MAX_PACKET_SIZE,50);
-		delete[] reply;
 	}
 
 	void BowtechDriver::generateCommand(uint8_t command, uint8_t value, uint8_t address, uint8_t *data)

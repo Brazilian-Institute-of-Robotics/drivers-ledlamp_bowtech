@@ -20,12 +20,10 @@ int main()
 	lamp.openSerial("/dev/ttyUSB0", 9600);
 	usleep(10000);
 
-//	lamp.setCmdLabel("<L>");
-
-	lamp.setPowerUpLightLevel(60);
+	lamp.setPowerUpLightLevel(0.6);
 	usleep(10000);
 
-	lamp.setLightLevel(40);
+	lamp.setLightLevel(0.4);
 	usleep(10000);
 
 
