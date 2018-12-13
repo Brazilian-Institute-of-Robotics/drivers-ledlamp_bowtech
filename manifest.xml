@@ -3,7 +3,7 @@
   
   </description>
   <author>Diego Cesar and Rafael Saback/diego.cesar@fieb.org.br; rafael.saback@fieb.org.br</author>
-  <license></license>
+  <license>BSD 3-Clause</license>
   <url>http://</url>
   <logo>http://</logo>
   <depend package="base/cmake" />
